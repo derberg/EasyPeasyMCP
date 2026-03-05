@@ -98,11 +98,11 @@ Paths are relative to the config file. Omit any key you don't have.
 
 ```bash
 # Use absolute path
-claude mcp add my-project npx easy-peasy-mcp@0.0.9 \
+claude mcp add my-project npx easy-peasy-mcp@0.0.10 \
   -- --rebuild --config /absolute/path/to/.easypeasymcp.json
 
 # Or convert relative to absolute with shell expansion
-claude mcp add my-project npx easy-peasy-mcp@0.0.9 \
+claude mcp add my-project npx easy-peasy-mcp@0.0.10 \
   -- --rebuild --config $(pwd)/.easypeasymcp.json
 ```
 
@@ -112,7 +112,7 @@ claude mcp add my-project npx easy-peasy-mcp@0.0.9 \
 No config file needed — pass everything directly. Works with URLs too:
 
 ```bash
-claude mcp add asyncapi npx easy-peasy-mcp@0.0.9 -- \
+claude mcp add asyncapi npx easy-peasy-mcp@0.0.10 -- \
   --name "asyncapi" \
   --llms https://raw.githubusercontent.com/derberg/EasyPeasyMCP/refs/heads/main/example-llms/asyncapi.txt
 ```
@@ -139,7 +139,7 @@ claude mcp add asyncapi npx easy-peasy-mcp@0.0.9 -- \
 For local Markdown files + OpenAPI/AsyncAPI specs:
 
 ```bash
-npx --package=easy-peasy-mcp@0.0.9 easy-peasy-build \
+npx --package=easy-peasy-mcp@0.0.10 easy-peasy-build \
   --docs ./guides \
   --docs ./api-reference \
   --openapi ./openapi \
@@ -170,6 +170,7 @@ To keep `llms-full.txt` fresh automatically, add a `build` section to `.easypeas
 | `--openapi <dir>` | `openapi` | Path to a directory of OpenAPI specs (JSON/YAML). Registers `list_openapi_specs` and `get_openapi_spec`. |
 | `--asyncapi <dir>` | `asyncapi` | Path to a directory of AsyncAPI specs (JSON/YAML). Registers `list_asyncapi_specs` and `get_asyncapi_spec`. |
 | `--rebuild` | `build` | Rebuild `llms-full.txt` from local sources on every startup. Requires a config file with a `build` section (see below). |
+| `--debug` | — | Enable debug logging to stderr. Useful for troubleshooting search issues or verifying content is loaded correctly. |
 
 Config file paths are resolved relative to the config file's location. At least one of `--llms`, `--openapi`, or `--asyncapi` is required.
 
@@ -215,7 +216,7 @@ Use the [MCP Inspector](https://github.com/modelcontextprotocol/inspector) to in
 
 ```bash
 npx @modelcontextprotocol/inspector@0.21.1 \
-  npx easy-peasy-mcp@0.0.9 -- \
+  npx easy-peasy-mcp@0.0.10 -- \
   --config /path/to/.easypeasymcp.json
 ```
 
@@ -224,7 +225,7 @@ npx @modelcontextprotocol/inspector@0.21.1 \
 
 ```bash
 npx @modelcontextprotocol/inspector@0.21.1 \
-  npx easy-peasy-mcp@0.0.9 -- \
+  npx easy-peasy-mcp@0.0.10 -- \
   --llms /path/to/llms-full.txt \
   --openapi /path/to/openapi
 ```
@@ -237,7 +238,16 @@ To try it right now without any local files:
 
 ```bash
 npx @modelcontextprotocol/inspector@0.21.1 \
-  npx easy-peasy-mcp@0.0.9 -- \
+  npx easy-peasy-mcp@0.0.10 -- \
   --llms https://raw.githubusercontent.com/derberg/EasyPeasyMCP/refs/heads/main/example-llms/asyncapi.txt
+```
+
+**Tip:** Add `--debug` to see detailed logging about content loading and search operations:
+
+```bash
+npx @modelcontextprotocol/inspector@0.21.1 \
+  npx easy-peasy-mcp@0.0.10 -- \
+  --config /path/to/.easypeasymcp.json \
+  --debug
 ```
 

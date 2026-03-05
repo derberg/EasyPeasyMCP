@@ -40,9 +40,15 @@ const { values: args } = parseArgs({
     asyncapi: { type: "string" },   // path to AsyncAPI directory
     name:     { type: "string" },   // project / server name
     rebuild:  { type: "boolean" },  // rebuild llms-full.txt before starting
+    debug:    { type: "boolean" },  // enable debug logging to stderr
   },
   strict: false,
 });
+
+// Debug logging helper — only logs when --debug is passed
+const debug = (...msg) => {
+  if (args.debug) console.error('[DEBUG]', ...msg);
+};
 
 // ---------------------------------------------------------------------------
 // Resolve configuration (file → override with CLI args)
@@ -128,12 +134,12 @@ if (llmsTxtSrc) {
       process.exit(1);
     }
     fullDocs = await res.text();
-    console.error(`[DEBUG] Loaded llms-full.txt from URL: ${llmsTxtSrc.length} bytes`);
+    debug(`Loaded llms-full.txt from URL: ${fullDocs.length} bytes`);
   } else {
     const resolvedPath = resolve(llmsTxtSrc);
-    console.error(`[DEBUG] Loading llms-full.txt from: ${resolvedPath}`);
+    debug(`Loading llms-full.txt from: ${resolvedPath}`);
     fullDocs = readFileSync(resolvedPath, "utf8");
-    console.error(`[DEBUG] Loaded llms-full.txt: ${fullDocs.length} bytes, ${fullDocs.split('\n').length} lines`);
+    debug(`Loaded llms-full.txt: ${fullDocs.length} bytes, ${fullDocs.split('\n').length} lines`);
   }
 }
 
@@ -274,16 +280,16 @@ if (hasAnyContent) {
       const lq = query.toLowerCase();
       const results = [];
       
-      console.error(`[DEBUG] search_documentation query="${query}" (lq="${lq}")`);
-      console.error(`[DEBUG] fullDocs is ${fullDocs ? `loaded (${fullDocs.length} bytes)` : 'null'}`);
-      console.error(`[DEBUG] openapiSpecs: ${Object.keys(openapiSpecs).length} specs`);
-      console.error(`[DEBUG] asyncapiSpecs: ${Object.keys(asyncapiSpecs).length} specs`);
+      debug(`search_documentation query="${query}" (lq="${lq}")`);
+      debug(`fullDocs is ${fullDocs ? `loaded (${fullDocs.length} bytes)` : 'null'}`);
+      debug(`openapiSpecs: ${Object.keys(openapiSpecs).length} specs`);
+      debug(`asyncapiSpecs: ${Object.keys(asyncapiSpecs).length} specs`);
 
       if (fullDocs) {
         const lines = fullDocs.split("\n");
-        console.error(`[DEBUG] Searching ${lines.length} lines in llms-full.txt`);
+        debug(`Searching ${lines.length} lines in llms-full.txt`);
         const matches = searchLines(lines, lq, context_lines, "llms-full.txt");
-        console.error(`[DEBUG] Found ${matches.length} matches in llms-full.txt`);
+        debug(`Found ${matches.length} matches in llms-full.txt`);
         results.push(...matches);
       }
       for (const [name, spec] of Object.entries(openapiSpecs)) {
