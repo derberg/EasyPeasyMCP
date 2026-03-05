@@ -247,9 +247,16 @@ if (hasAnyContent) {
           .max(20)
           .default(2)
           .describe("Lines of context before and after each match (0–20, default 2)"),
+        max_results: z
+          .number()
+          .int()
+          .min(1)
+          .max(50)
+          .default(5)
+          .describe("Maximum number of results to return (1–50, default 5)"),
       },
     },
-    async ({ query, context_lines = 2 }) => {
+    async ({ query, context_lines = 2, max_results = 5 }) => {
       const lq = query.toLowerCase();
       const results = [];
 
@@ -269,10 +276,9 @@ if (hasAnyContent) {
         return { content: [{ type: "text", text: `No matches found for "${query}".` }] };
       }
 
-      const MAX = 100;
-      const truncated = results.length > MAX;
+      const truncated = results.length > max_results;
       const output = results
-        .slice(0, MAX)
+        .slice(0, max_results)
         .map((r) => r.text)
         .join("\n\n---\n\n");
 
@@ -283,7 +289,7 @@ if (hasAnyContent) {
             text:
               output +
               (truncated
-                ? `\n\n[Showing first ${MAX} of ${results.length} matches — refine your query for fewer results.]`
+                ? `\n\n[Showing first ${max_results} of ${results.length} matches — refine your query or increase max_results for more.]`
                 : ""),
           },
         ],
