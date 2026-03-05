@@ -251,3 +251,5 @@ npx @modelcontextprotocol/inspector@0.21.1 \
   --debug
 ```
 
+Debug logs appear in the **Server Notifications** view in the MCP Inspector UI.
+
