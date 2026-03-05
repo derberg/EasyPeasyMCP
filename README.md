@@ -95,7 +95,7 @@ Paths are relative to the config file. Omit any key you don't have.
 `llmsTxt` can also be a URL. The `build` section is optional — include it if you want the server to regenerate `llms-full.txt` on every startup (add `--rebuild` to the command below).
 
 ```bash
-claude mcp add my-project npx easy-peasy-mcp@0.0.2 \
+claude mcp add my-project npx easy-peasy-mcp@0.0.3 \
   -- --rebuild --config /absolute/path/to/.easypeasymcp.json
 ```
 
@@ -105,7 +105,7 @@ claude mcp add my-project npx easy-peasy-mcp@0.0.2 \
 No config file needed — pass everything directly. Works with URLs too:
 
 ```bash
-claude mcp add asyncapi npx easy-peasy-mcp@0.0.2 -- \
+claude mcp add asyncapi npx easy-peasy-mcp@0.0.3 -- \
   --name "asyncapi" \
   --llms https://github.com/derberg/EasyPeasyMCP/blob/main/example-llms/asyncapi.txt
 ```
@@ -132,7 +132,7 @@ claude mcp add asyncapi npx easy-peasy-mcp@0.0.2 -- \
 For local Markdown files + OpenAPI/AsyncAPI specs:
 
 ```bash
-npx --package=easy-peasy-mcp@0.0.2 easy-peasy-build \
+npx --package=easy-peasy-mcp@0.0.3 easy-peasy-build \
   --docs ./guides \
   --docs ./api-reference \
   --openapi ./openapi \
@@ -208,7 +208,7 @@ Use the [MCP Inspector](https://github.com/modelcontextprotocol/inspector) to in
 
 ```bash
 npx @modelcontextprotocol/inspector@0.21.1 \
-  npx easy-peasy-mcp@0.0.2 -- \
+  npx easy-peasy-mcp@0.0.3 -- \
   --config /path/to/.easypeasymcp.json
 ```
 
@@ -217,7 +217,7 @@ npx @modelcontextprotocol/inspector@0.21.1 \
 
 ```bash
 npx @modelcontextprotocol/inspector@0.21.1 \
-  npx easy-peasy-mcp@0.0.2 -- \
+  npx easy-peasy-mcp@0.0.3 -- \
   --llms /path/to/llms-full.txt \
   --openapi /path/to/openapi
 ```
@@ -230,7 +230,7 @@ To try it right now without any local files:
 
 ```bash
 npx @modelcontextprotocol/inspector@0.21.1 \
-  npx easy-peasy-mcp@0.0.2 -- \
+  npx easy-peasy-mcp@0.0.3 -- \
   --llms https://likec4.dev/llms-full.txt
 ```
 
