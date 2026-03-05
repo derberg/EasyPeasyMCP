@@ -47,7 +47,7 @@ const { values: args } = parseArgs({
 
 // Debug logging helper — only logs when --debug is passed
 const debug = (...msg) => {
-  if (args.debug) console.error('[DEBUG]', ...msg);
+  if (args.debug) process.stderr.write(`[DEBUG] ${msg.join(' ')}\n`);
 };
 
 // ---------------------------------------------------------------------------
