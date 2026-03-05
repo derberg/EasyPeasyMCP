@@ -94,9 +94,16 @@ build:
 Paths are relative to the config file. Omit any key you don't have.
 `llmsTxt` can also be a URL. The `build` section is optional — include it if you want the server to regenerate `llms-full.txt` on every startup (add `--rebuild` to the command below).
 
+**Registration requires absolute path to config file** (paths inside the config are relative to it):
+
 ```bash
+# Use absolute path
 claude mcp add my-project npx easy-peasy-mcp@0.0.5 \
   -- --rebuild --config /absolute/path/to/.easypeasymcp.json
+
+# Or convert relative to absolute with shell expansion
+claude mcp add my-project npx easy-peasy-mcp@0.0.5 \
+  -- --rebuild --config $(pwd)/.easypeasymcp.json
 ```
 
 </td>
