@@ -69,7 +69,7 @@ export function build({ docs = [], openapi, asyncapi, title = "Documentation", o
 
   if (output) {
     writeFileSync(output, result, "utf8");
-    console.error(`Written to ${output}  (${formatBytes(Buffer.byteLength(result, "utf8"))})`);
+    console.log(`Build complete: ${resolve(output)}  (${formatBytes(Buffer.byteLength(result, "utf8"))})`);
   }
 
   return result;

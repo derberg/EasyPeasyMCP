@@ -1,21 +1,48 @@
 # EasyPeasyMCP
 
+<table><tr>
+<td><img src="assets/logo.png" alt="EasyPeasyMCP logo" /></td>
+<td>
+
 A lightweight, zero-config [MCP](https://modelcontextprotocol.io/) server for documentation projects.
 
-Give it an `llms-full.txt` file (local path or URL) and optional OpenAPI/AsyncAPI directories. It registers only the tools that make sense for what you've provided — no code changes, no hard-coded paths.
+Give it an `llms-full.txt` file (local path or URL) and optional OpenAPI/AsyncAPI directories. It also hellps you to build one if you do not have it. It registers only the MCP tools that make sense for what you've provided — no code changes, no hard-coded paths.
+
+</td>
+</tr></table>
+
+## Table of Contents
+
+- [Why it's different](#why-its-different)
+- [When to use this — and when not to](#when-to-use-this--and-when-not-to)
+- [How it works](#how-it-works)
+- [Quick start](#quick-start)
+- [Generating llms-full.txt](#generating-llms-fulltxt)
+- [Configuration reference](#configuration-reference)
+  - [`easy-peasy-mcp` (MCP server)](#easy-peasy-mcp-mcp-server)
+  - [`easy-peasy-build` (llms-full.txt generator)](#easy-peasy-build-llms-fulltxt-generator)
+- [Local debugging](#local-debugging)
 
 ## Why it's different
 
 * **No RAG, no vector database, no embedding pipeline.**
 Search is a case-insensitive line scan with configurable context — all in-process, in memory. For small projects with well-structured content like `llms-full.txt`, this is all you need to get started — no infrastructure, no ops burden, easy to pitch internally. The entire search capability is ~25 lines of vanilla JS with zero runtime dependencies.
-
-    > For larger or longer-term needs, a proper RAG setup with semantic search will outperform this — but that's a problem worth having once you've validated the use case.
 * **Any project with an `llms-full.txt` is MCP-enabled in 30 seconds.**
 Point `llmsTxt` at a hosted URL and you're done — no local file sync, no pipeline. Docs update, the AI gets fresh content automatically. It's the adoption curve that matters: the [llms.txt standard](https://llmstxt.org/) is becoming the norm for docs sites, and this tool makes every one of them instantly AI-accessible. 
 
     Don't have an `llms-full.txt` yet? No problem — as long as you have Markdown files, the bundled `easy-peasy-build` CLI will generate one for you from your docs and specs.
 * **Conditional tool registration keeps the AI's context clean.**
 No OpenAPI directory? No `list_openapi_specs` tool. Tools only appear when the content exists — the MCP surface matches exactly what you've provided.
+
+## When to use this — and when not to
+
+This is a **speed-first tool**. Use it when you need an agent to access new knowledge in minutes, not days — a quick proof of concept, a personal workflow, a demo, or an early internal pilot where getting something working fast matters more than getting it perfect.
+
+For professional, long-term setups shared across teams, you will eventually want a proper **chunk → embed → RAG** pipeline instead. That gives you semantic search (the agent finds *meaning*, not just matching words), much lower token consumption per query, and the ability to scale across large or frequently updated knowledge bases without loading everything into memory. This tool loads the full content on every startup — that's fine for a few hundred KB, but it's a ceiling, not a foundation.
+
+No docs at all? Not even Markdown files? If you're in a real hurry, just ask the agent to scrape the developer portal you depend on — it can crawl the relevant pages and pull the content together. It can even check common locations for OpenAPI or AsyncAPI specs and fetch those too. Combine that with `easy-peasy-build` and you have a working MCP server in minutes, with zero local files to maintain.
+
+The honest summary: use this to validate that AI-assisted documentation is worth investing in. Once it is, graduate to a proper RAG stack.
 
 ## How it works
 
@@ -37,8 +64,9 @@ No OpenAPI directory? No `list_openapi_specs` tool. Tools only appear when the c
 <tr>
 <td>
 
-Drop an `.easypeasymcp.json` in your docs project root:
+Drop an `.easypeasymcp.json` (or `.easypeasymcp.yaml`) in your docs project root:
 
+**JSON:**
 ```json
 {
   "name": "my-project",
@@ -51,11 +79,23 @@ Drop an `.easypeasymcp.json` in your docs project root:
 }
 ```
 
+**YAML:**
+```yaml
+name: my-project
+llmsTxt: ./llms-full.txt
+openapi: ./openapi
+asyncapi: ./asyncapi
+build:
+  docs:
+    - ./guides
+    - ./api-reference
+```
+
 Paths are relative to the config file. Omit any key you don't have.
 `llmsTxt` can also be a URL. The `build` section is optional — include it if you want the server to regenerate `llms-full.txt` on every startup (add `--rebuild` to the command below).
 
 ```bash
-claude mcp add my-project npx easy-peasy-mcp \
+claude mcp add my-project npx easy-peasy-mcp@0.0.2 \
   -- --rebuild --config /absolute/path/to/.easypeasymcp.json
 ```
 
@@ -65,9 +105,9 @@ claude mcp add my-project npx easy-peasy-mcp \
 No config file needed — pass everything directly. Works with URLs too:
 
 ```bash
-claude mcp add likec4 npx easy-peasy-mcp -- \
-  --name "likec4" \
-  --llms https://likec4.dev/llms-full.txt
+claude mcp add asyncapi npx easy-peasy-mcp@0.0.2 -- \
+  --name "asyncapi" \
+  --llms https://github.com/derberg/EasyPeasyMCP/blob/main/example-llms/asyncapi.txt
 ```
 
 </td>
@@ -92,7 +132,7 @@ claude mcp add likec4 npx easy-peasy-mcp -- \
 For local Markdown files + OpenAPI/AsyncAPI specs:
 
 ```bash
-npx easy-peasy-build \
+npx --package=easy-peasy-mcp@0.0.2 easy-peasy-build \
   --docs ./guides \
   --docs ./api-reference \
   --openapi ./openapi \
@@ -167,8 +207,8 @@ Use the [MCP Inspector](https://github.com/modelcontextprotocol/inspector) to in
 <td>
 
 ```bash
-npx @modelcontextprotocol/inspector@latest \
-  npx easy-peasy-mcp -- \
+npx @modelcontextprotocol/inspector@0.21.1 \
+  npx easy-peasy-mcp@0.0.2 -- \
   --config /path/to/.easypeasymcp.json
 ```
 
@@ -176,8 +216,8 @@ npx @modelcontextprotocol/inspector@latest \
 <td>
 
 ```bash
-npx @modelcontextprotocol/inspector@latest \
-  npx easy-peasy-mcp -- \
+npx @modelcontextprotocol/inspector@0.21.1 \
+  npx easy-peasy-mcp@0.0.2 -- \
   --llms /path/to/llms-full.txt \
   --openapi /path/to/openapi
 ```
@@ -189,8 +229,8 @@ npx @modelcontextprotocol/inspector@latest \
 To try it right now without any local files:
 
 ```bash
-npx @modelcontextprotocol/inspector@latest \
-  npx easy-peasy-mcp -- \
+npx @modelcontextprotocol/inspector@0.21.1 \
+  npx easy-peasy-mcp@0.0.2 -- \
   --llms https://likec4.dev/llms-full.txt
 ```
 
