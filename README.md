@@ -114,7 +114,7 @@ No config file needed — pass everything directly. Works with URLs too:
 ```bash
 claude mcp add asyncapi npx easy-peasy-mcp@0.0.5 -- \
   --name "asyncapi" \
-  --llms https://github.com/derberg/EasyPeasyMCP/blob/main/example-llms/asyncapi.txt
+  --llms https://raw.githubusercontent.com/derberg/EasyPeasyMCP/refs/heads/main/example-llms/asyncapi.txt
 ```
 
 </td>
@@ -238,6 +238,6 @@ To try it right now without any local files:
 ```bash
 npx @modelcontextprotocol/inspector@0.21.1 \
   npx easy-peasy-mcp@0.0.5 -- \
-  --llms https://likec4.dev/llms-full.txt
+  --llms https://raw.githubusercontent.com/derberg/EasyPeasyMCP/refs/heads/main/example-llms/asyncapi.txt
 ```
 
