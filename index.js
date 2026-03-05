@@ -9,6 +9,7 @@
  * Usage:
  *   node index.js --llms ./llms-full.txt --openapi ./openapi --name "my-project"
  *   node index.js --config ./.easypeasymcp.json
+ *   node index.js --config ./.easypeasymcp.yaml
  *
  * Tools registered dynamically:
  *   llmsTxt provided  → get_full_documentation, search_documentation
@@ -52,7 +53,16 @@ let cfg = {};
 if (args.config) {
   const configPath = resolve(args.config);
   const configDir = dirname(configPath);
-  const raw = JSON.parse(readFileSync(configPath, "utf8"));
+  const configContent = readFileSync(configPath, "utf8");
+  
+  // Parse config file based on extension
+  const ext = extname(configPath).toLowerCase();
+  let raw;
+  if (ext === ".yaml" || ext === ".yml") {
+    raw = yamlLoad(configContent);
+  } else {
+    raw = JSON.parse(configContent);
+  }
 
   // Paths in config are relative to the config file's directory
   const rel = (p) => (p ? resolve(configDir, p) : undefined);
