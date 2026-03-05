@@ -19,7 +19,7 @@
  * Omit --output to print to stdout.
  */
 
-import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from "fs";
+import { readFileSync, writeFileSync, readdirSync, statSync, existsSync, realpathSync } from "fs";
 import { join, relative, resolve, extname } from "path";
 import { parseArgs } from "util";
 import { fileURLToPath } from "url";
@@ -69,7 +69,7 @@ export function build({ docs = [], openapi, asyncapi, title = "Documentation", o
 
   if (output) {
     writeFileSync(output, result, "utf8");
-    console.log(`Build complete: ${resolve(output)}  (${formatBytes(Buffer.byteLength(result, "utf8"))})`);
+    process.stdout.write(`Build complete: ${resolve(output)}  (${formatBytes(Buffer.byteLength(result, "utf8"))})\n`);
   }
 
   return result;
@@ -142,7 +142,12 @@ function formatBytes(bytes) {
 // CLI entry point
 // ---------------------------------------------------------------------------
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+// Check if this file is being run directly (handles both direct execution and symlinks)
+const scriptPath = fileURLToPath(import.meta.url);
+const isDirectExecution = process.argv[1] === scriptPath || 
+                         (existsSync(process.argv[1]) && realpathSync(process.argv[1]) === scriptPath);
+
+if (isDirectExecution) {
   const { values: args } = parseArgs({
     args: process.argv.slice(2),
     options: {
