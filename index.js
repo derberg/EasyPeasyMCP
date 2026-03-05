@@ -128,8 +128,12 @@ if (llmsTxtSrc) {
       process.exit(1);
     }
     fullDocs = await res.text();
+    console.error(`[DEBUG] Loaded llms-full.txt from URL: ${llmsTxtSrc.length} bytes`);
   } else {
-    fullDocs = readFileSync(resolve(llmsTxtSrc), "utf8");
+    const resolvedPath = resolve(llmsTxtSrc);
+    console.error(`[DEBUG] Loading llms-full.txt from: ${resolvedPath}`);
+    fullDocs = readFileSync(resolvedPath, "utf8");
+    console.error(`[DEBUG] Loaded llms-full.txt: ${fullDocs.length} bytes, ${fullDocs.split('\n').length} lines`);
   }
 }
 
@@ -269,9 +273,18 @@ if (hasAnyContent) {
     async ({ query, context_lines = 2, max_results = 5 }) => {
       const lq = query.toLowerCase();
       const results = [];
+      
+      console.error(`[DEBUG] search_documentation query="${query}" (lq="${lq}")`);
+      console.error(`[DEBUG] fullDocs is ${fullDocs ? `loaded (${fullDocs.length} bytes)` : 'null'}`);
+      console.error(`[DEBUG] openapiSpecs: ${Object.keys(openapiSpecs).length} specs`);
+      console.error(`[DEBUG] asyncapiSpecs: ${Object.keys(asyncapiSpecs).length} specs`);
 
       if (fullDocs) {
-        results.push(...searchLines(fullDocs.split("\n"), lq, context_lines, "llms-full.txt"));
+        const lines = fullDocs.split("\n");
+        console.error(`[DEBUG] Searching ${lines.length} lines in llms-full.txt`);
+        const matches = searchLines(lines, lq, context_lines, "llms-full.txt");
+        console.error(`[DEBUG] Found ${matches.length} matches in llms-full.txt`);
+        results.push(...matches);
       }
       for (const [name, spec] of Object.entries(openapiSpecs)) {
         const text = typeof spec === "string" ? spec : JSON.stringify(spec, null, 2);

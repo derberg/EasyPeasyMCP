@@ -98,11 +98,11 @@ Paths are relative to the config file. Omit any key you don't have.
 
 ```bash
 # Use absolute path
-claude mcp add my-project npx easy-peasy-mcp@0.0.8 \
+claude mcp add my-project npx easy-peasy-mcp@0.0.9 \
   -- --rebuild --config /absolute/path/to/.easypeasymcp.json
 
 # Or convert relative to absolute with shell expansion
-claude mcp add my-project npx easy-peasy-mcp@0.0.8 \
+claude mcp add my-project npx easy-peasy-mcp@0.0.9 \
   -- --rebuild --config $(pwd)/.easypeasymcp.json
 ```
 
@@ -112,7 +112,7 @@ claude mcp add my-project npx easy-peasy-mcp@0.0.8 \
 No config file needed — pass everything directly. Works with URLs too:
 
 ```bash
-claude mcp add asyncapi npx easy-peasy-mcp@0.0.8 -- \
+claude mcp add asyncapi npx easy-peasy-mcp@0.0.9 -- \
   --name "asyncapi" \
   --llms https://raw.githubusercontent.com/derberg/EasyPeasyMCP/refs/heads/main/example-llms/asyncapi.txt
 ```
@@ -139,7 +139,7 @@ claude mcp add asyncapi npx easy-peasy-mcp@0.0.8 -- \
 For local Markdown files + OpenAPI/AsyncAPI specs:
 
 ```bash
-npx --package=easy-peasy-mcp@0.0.8 easy-peasy-build \
+npx --package=easy-peasy-mcp@0.0.9 easy-peasy-build \
   --docs ./guides \
   --docs ./api-reference \
   --openapi ./openapi \
@@ -215,7 +215,7 @@ Use the [MCP Inspector](https://github.com/modelcontextprotocol/inspector) to in
 
 ```bash
 npx @modelcontextprotocol/inspector@0.21.1 \
-  npx easy-peasy-mcp@0.0.8 -- \
+  npx easy-peasy-mcp@0.0.9 -- \
   --config /path/to/.easypeasymcp.json
 ```
 
@@ -224,7 +224,7 @@ npx @modelcontextprotocol/inspector@0.21.1 \
 
 ```bash
 npx @modelcontextprotocol/inspector@0.21.1 \
-  npx easy-peasy-mcp@0.0.8 -- \
+  npx easy-peasy-mcp@0.0.9 -- \
   --llms /path/to/llms-full.txt \
   --openapi /path/to/openapi
 ```
@@ -237,7 +237,7 @@ To try it right now without any local files:
 
 ```bash
 npx @modelcontextprotocol/inspector@0.21.1 \
-  npx easy-peasy-mcp@0.0.8 -- \
+  npx easy-peasy-mcp@0.0.9 -- \
   --llms https://raw.githubusercontent.com/derberg/EasyPeasyMCP/refs/heads/main/example-llms/asyncapi.txt
 ```
 

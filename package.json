@@ -1,6 +1,6 @@
 {
   "name": "easy-peasy-mcp",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Lightweight zero-config MCP server. Give it an llms-full.txt (path or URL) and optional OpenAPI/AsyncAPI dirs — it registers the right tools automatically.",
   "type": "module",
   "main": "index.js",
