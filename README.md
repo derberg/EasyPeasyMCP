@@ -11,7 +11,7 @@ Give it an `llms-full.txt` file (local path or URL) and optional OpenAPI/AsyncAP
 </td>
 </tr></table>
 
-<video src="https://github.com/derberg/EasyPeasyMCP/raw/refs/heads/main/assets/demo.mp4" controls width="800"></video>
+<video src="https://github.com/user-attachments/assets/c4c20cfb-eba9-467f-9cdc-24e78e230b63" controls width="800"></video>
 
 ## Table of Contents
 
