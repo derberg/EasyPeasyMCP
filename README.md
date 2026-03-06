@@ -8,10 +8,10 @@ A lightweight, zero-config [MCP](https://modelcontextprotocol.io/) server for do
 
 Give it an `llms-full.txt` file (local path or URL) and optional OpenAPI/AsyncAPI directories. It also hellps you to build one if you do not have it. It registers only the MCP tools that make sense for what you've provided — no code changes, no hard-coded paths.
 
-<video src="assets/demo.mp4" controls width="800"></video>
-
 </td>
 </tr></table>
+
+<video src="assets/demo.mp4" controls width="800"></video>
 
 ## Table of Contents
 
